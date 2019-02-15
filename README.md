@@ -1,2 +1,2 @@
 # elios-take-home
-Take home project for Elios Technologyu
+Take home project for Elios Technology
