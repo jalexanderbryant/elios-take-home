@@ -7,6 +7,9 @@ from sqlalchemy import Boolean
 from sqlalchemy import create_engine
 from sqlalchemy.orm import relationship
 from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy_utils import database_exists
+from sqlalchemy_utils import create_database
+from sqlalchemy_utils import drop_database
 
 
 Base = declarative_base()
@@ -17,7 +20,8 @@ class User(Base):
     first_name = Column(String(64))
     middle_name = Column(String(64))
     last_name = Column(String(64))
-    date_of_birth = Column(Date)
+    full_name = Column(String(64))
+    date_of_birth = Column(String(64))
     has_criminal_record = Column(Boolean, nullable=False)
     risk_score = Column(Integer, nullable=False)
 
@@ -29,6 +33,7 @@ class User(Base):
             'first_name': self.first_name,
             'middle_name': self.middle_name,
             'last_name': self.last_name,
+            'full_name': self.full_name,
             'date_of_birth': self.date_of_birth,
             'risk_score': self.risk_score,
             'has_criminal_record': self.has_criminal_record,
@@ -37,7 +42,6 @@ class User(Base):
 class Address(Base):
     __tablename__ = 'address'
     id = Column(Integer, primary_key=True)
-    user_id = Column(Integer, ForeignKey('user.id'))
     street = Column(String(64))
     city = Column(String(64))
     state = Column(String(64))
@@ -45,6 +49,9 @@ class Address(Base):
     type = Column(String(32))
     time = Column(String(32))
     value = Column(Integer)
+
+    user = relationship(User)
+    user_id = Column(Integer, ForeignKey('user.id'))
 
     @property
     def serialize(self):
@@ -65,33 +72,35 @@ class CriminalRecord(Base):
     __tablename__ = 'criminal_record'
 
     id = Column(Integer, primary_key=True)
+    user = relationship(User)
     user_id = Column(Integer, ForeignKey('user.id'))
+
     first_name = Column(String(64))
     middle_name =Column(String(64))
     last_name = Column(String(64))
     race = Column(String(64))
-    date_of_birth = Column(Date)
+    date_of_birth = Column(String(64))
     address = Column(String(64))
     address_second_line = Column(String(64))
     city= Column(String(64))
-    state= Column(String(3))
+    state= Column(String(64))
     zip= Column(Integer)
     case_number= Column(String(64))
     charge_category= Column(String(64))
-    charges_filed_date= Column(Date)
-    offense_date= Column(Date)
+    charges_filed_date= Column(String(64))
+    offense_date= Column(String(64))
     offense_code= Column(String(64))
     offense_description= Column(String(64))
     counts= Column(Integer)
     plea= Column(String(64))
-    conviction_date= Column(Date)
+    conviction_date= Column(String(64))
     conviction_place= Column(String(64))
     court= Column(String(64))
     source= Column(String(64))
     sentence_date= Column(Integer)
     probation_date= Column(Integer)
     disposition= Column(String(64))
-    disposition_date= Column(Date)
+    disposition_date= Column(String(64))
     arresting_agency= Column(String(64))
     case_type= Column(String(64))
     fines= Column(String(64))
@@ -108,6 +117,7 @@ class CriminalRecord(Base):
             "first_name": self.first_name,
             "middle_name": self.middle_name,
             "last_name": self.last_name,
+            "full_name": self.full_name,
             "race": self.race,
             "date_of_birth": self.date_of_birth,
             "address": self.address,
@@ -141,4 +151,13 @@ class CriminalRecord(Base):
     
 
 engine = create_engine('postgresql+psycopg2://flask_dev:letmein123@localhost/elios')
+
+if database_exists(engine.url):
+    print("Dropping DB before creating")
+    drop_database(engine.url)
+
+print("Creating new DB")
+create_database(engine.url)
+
+print("DB Created? %s at URL: %s  " % (database_exists(engine.url), engine.url))
 Base.metadata.create_all(engine)
