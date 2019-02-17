@@ -1,4 +1,13 @@
 from elios_app import app
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
+from elios_app.models import Base, Address, CriminalRecord, User
+from flask import request, redirect, jsonify, url_for
+import json
+
+## Setup DB Session
+engine = create_engine('postgresql+psycopg2://flask_dev:letmein123@localhost/elios')
+session = sessionmaker(bind=engine)()
 
 @app.route('/')
 @app.route('/home/')
@@ -6,9 +15,10 @@ def home():
     return "Hello, world!"
 
 @app.route('/users/')
-def list_users():
+def show_users():
   """ List all users - Will return a table"""
-  return "All Users"
+  users = session.query(User).all()
+  return jsonify(users = [u.serialize for u in users])
 
 @app.route('/users/<int:user_id>/')
 def list_single_user(user_id):
