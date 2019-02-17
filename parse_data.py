@@ -1,7 +1,7 @@
 import ijson
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from database import Base, User, Address, CriminalRecord
+from elios_app.models import Base, User, Address, CriminalRecord
 from database import engine
 
 # Connect to Database
