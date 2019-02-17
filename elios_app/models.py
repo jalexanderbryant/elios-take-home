@@ -9,8 +9,8 @@ from sqlalchemy.ext.declarative import declarative_base
 Base = declarative_base()
 
 
-class User(Base):
-    __tablename__ = 'user'
+class Person(Base):
+    __tablename__ = 'person'
     id = Column(Integer, primary_key=True)
     first_name = Column(String(64))
     middle_name = Column(String(64))
@@ -19,10 +19,21 @@ class User(Base):
     date_of_birth = Column(String(64))
     has_criminal_record = Column(Boolean, nullable=False)
     risk_score = Column(Integer, nullable=False)
+    addresses = relationship('Address', back_populates='person')
+    records = relationship('CriminalRecord', back_populates='person')
 
     @property
-    def serialize(self):
-        """Return serialized data for User"""
+    def serialize_summary(self):
+        """Return serialized data for Person"""
+        return {
+            'id': self.id,
+            'full_name': self.full_name,
+            'date_of_birth': self.date_of_birth,
+            'risk_score': self.risk_score,
+            'has_criminal_record': self.has_criminal_record,
+        }
+    @property
+    def serialize_full(self):
         return {
             'id': self.id,
             'first_name': self.first_name,
@@ -32,7 +43,10 @@ class User(Base):
             'date_of_birth': self.date_of_birth,
             'risk_score': self.risk_score,
             'has_criminal_record': self.has_criminal_record,
+            'addresses': [addr.serialize for addr in self.addresses],
+            'criminal_records': [record.serialize for record in self.records],
         }
+    
 
 class Address(Base):
     __tablename__ = 'address'
@@ -45,15 +59,15 @@ class Address(Base):
     time = Column(String(32))
     value = Column(Integer)
 
-    user = relationship(User)
-    user_id = Column(Integer, ForeignKey('user.id'))
+    person = relationship('Person', back_populates='addresses')
+    person_id = Column(Integer, ForeignKey('person.id'))
 
     @property
     def serialize(self):
         """Return serialized data for Address"""
         return {
             'id': self.id,
-            'user_id': self.user_id,
+            'person_id': self.person_id,
             'street': self.street,
             'city': self.city,
             'state': self.state,
@@ -67,8 +81,9 @@ class CriminalRecord(Base):
     __tablename__ = 'criminal_record'
 
     id = Column(Integer, primary_key=True)
-    user = relationship(User)
-    user_id = Column(Integer, ForeignKey('user.id'))
+    person_id = Column(Integer, ForeignKey('person.id'))
+
+    person = relationship('Person', back_populates='records')
 
     first_name = Column(String(64))
     middle_name =Column(String(64))
@@ -108,11 +123,10 @@ class CriminalRecord(Base):
         """Return serialized data for Criminal Record"""
         return {
             "id": self.id,
-            "user_id": self.user_id,
+            "person_id": self.person_id,
             "first_name": self.first_name,
             "middle_name": self.middle_name,
             "last_name": self.last_name,
-            "full_name": self.full_name,
             "race": self.race,
             "date_of_birth": self.date_of_birth,
             "address": self.address,

@@ -1,7 +1,7 @@
 import ijson
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from elios_app.models import Base, User, Address, CriminalRecord
+from elios_app.models import Base, Person, Address, CriminalRecord
 from database import engine
 
 # Connect to Database
@@ -12,7 +12,7 @@ session = sessionmaker(bind=engine)()
 
 def parse():
     # Ensure tables are empty first
-    session.query(User).delete()
+    session.query(Person).delete()
     session.query(CriminalRecord).delete()
     session.query(Address).delete()
     print("DB emptied")
@@ -23,7 +23,7 @@ def parse():
     with open(filename, 'r') as json_input:
         objects = ijson.items(json_input, 'item')
         for row in objects:
-            new_user = User(
+            new_person = Person(
                 first_name  = row['fname'],
                 middle_name = row['mname'],
                 last_name   = row['lname'],
@@ -33,16 +33,16 @@ def parse():
                 has_criminal_record = len(row['criminal']['criminal']) > 0
             )
 
-            new_user.risk_score = calculate_risk_score()
+            new_person.risk_score = calculate_risk_score()
 
-            ## Save User
-            session.add(new_user)
+            ## Save person
+            session.add(new_person)
             session.commit()
 
-            ## Get User addresses
+            ## Get person addresses
             for addr in row['addresses']:
                 address = Address(
-                    user = new_user,
+                    person = new_person,
                     street = addr['street'],
                     city = addr['city'],
                     state = addr['state'],
@@ -56,7 +56,7 @@ def parse():
                 session.commit()
 
 
-                # print(address.user_id)
+                # print(address.person_id)
                 # print(address.street)
                 # print(address.city)
                 # print(address.state)
@@ -66,10 +66,10 @@ def parse():
                 # print(address.value)
                 # print("\n")
 
-            ## Get User's criminal records
+            ## Get person's criminal records
             for rec in row['criminal']['criminal']:
                 record = CriminalRecord(
-                    user = new_user,
+                    person = new_person,
                     first_name = rec['firstname'],
                     middle_name = rec['middlename'],
                     last_name = rec['lastname'],
@@ -113,8 +113,8 @@ def parse():
                     # print("%s: %s" % (r, record.__dict__[r]))
             # print(obj['fname'])
             # print(obj['mname'])
-            # print(new_user.risk_score)
-            # print(new_user.has_criminal_record)
+            # print(new_person.risk_score)
+            # print(new_person.has_criminal_record)
             
             # print(type(obj['criminal']))
             # print(obj['criminal']['criminal'])

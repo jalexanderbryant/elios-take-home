@@ -2,7 +2,7 @@ from sqlalchemy import create_engine
 from sqlalchemy_utils import database_exists
 from sqlalchemy_utils import create_database
 from sqlalchemy_utils import drop_database
-from elios_app.models import User, Address, CriminalRecord, Base
+from elios_app.models import Person, Address, CriminalRecord, Base
 
 engine = create_engine('postgresql+psycopg2://flask_dev:letmein123@localhost/elios')
 
