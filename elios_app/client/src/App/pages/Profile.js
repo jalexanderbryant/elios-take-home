@@ -14,9 +14,8 @@ import {
     AccordionItemTitle,
     AccordionItemBody,
 } from 'react-accessible-accordion';
-
 import 'react-accessible-accordion/dist/fancy-example.css';
-
+import NavBar from './partials/NavBar';
 
 const CriminalRecord = ({data}) => {
   // console.log(data);
@@ -149,6 +148,7 @@ class Profile extends Component {
     const { isLoading, person, error } = this.state;
     return(
       <React.Fragment>
+        <NavBar />
         <Container>
           {Object.keys(person).map(key => <Person key={key} body={person[key]} />)}
         </Container>

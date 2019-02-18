@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import { Link, withRouter } from 'react-router-dom';
-import Table from 'react-bootstrap/Table'
-import Jumbotron from 'react-bootstrap/Jumbotron'
-import Container from 'react-bootstrap/Container'
+import Table from 'react-bootstrap/Table';
+import Jumbotron from 'react-bootstrap/Jumbotron';
+import Container from 'react-bootstrap/Container';
+import NavBar from './partials/NavBar';
 
 const Person = ({ body, getProfile }) => {
 
@@ -65,6 +66,7 @@ class PersonnelList extends Component {
     const { isLoading, people, error } = this.state;
     return(
       <React.Fragment>
+        <NavBar />
         <Container>
           <Jumbotron>
             <h1>Elios Personnel List</h1>
@@ -84,7 +86,7 @@ class PersonnelList extends Component {
             
           </Table>
         </Container>
-        {/* {!isLoading ? Object.keys(people).map(key => <Person key={key} body={people[key]} />) : <h3>Loading...</h3>} */}
+        
       </React.Fragment>
     );
     

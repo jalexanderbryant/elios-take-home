@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import { Link, withRouter } from 'react-router-dom';
-import Table from 'react-bootstrap/Table'
-import Jumbotron from 'react-bootstrap/Jumbotron'
-import Container from 'react-bootstrap/Container'
+import Table from 'react-bootstrap/Table';
+import Jumbotron from 'react-bootstrap/Jumbotron';
+import Container from 'react-bootstrap/Container';
+import NavBar from './partials/NavBar';
 
 class EditProfile extends Component {
   constructor(props){
@@ -25,16 +26,19 @@ class EditProfile extends Component {
 
   render(){
     return(
-      <Container>
-        <form onSubmit={this.handleSubmit}>
-          <label>
-            Full Name: <br />
-            <input type="text" ref={(input) => this.input = input} name="name" id="name" placeholder="Enter a new full name" />
-          </label>
-          <br />
-          <input type="submit" value="Submit" />
-        </form>
-      </Container>
+      <React.Fragment>
+        <NavBar />
+        <Container>
+          <form onSubmit={this.handleSubmit}>
+            <label>
+              Full Name: <br />
+              <input type="text" ref={(input) => this.input = input} name="name" id="name" placeholder="Enter a new full name" />
+            </label>
+            <br />
+            <input type="submit" value="Submit" />
+          </form>
+        </Container>
+      </React.Fragment>
     );
   }
 }
