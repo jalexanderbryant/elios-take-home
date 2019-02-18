@@ -9,3 +9,5 @@ htmlcov/
 dist/
 build/
 *.egg-info/
+
+elios_app/static/node_modules

@@ -1,5 +1,7 @@
 from flask import Flask
-app = Flask(__name__)
+from flask_cors import CORS
+app = Flask(__name__, template_folder='static/public')
+CORS(app)
 import elios_app.views
 import elios_app.models
 

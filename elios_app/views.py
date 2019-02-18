@@ -2,7 +2,7 @@ from elios_app import app
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from elios_app.models import Base, Address, CriminalRecord, Person
-from flask import request, redirect, jsonify, url_for
+from flask import request, redirect, jsonify, url_for, render_template
 import json
 
 ## Setup DB Session
@@ -10,6 +10,9 @@ engine = create_engine('postgresql+psycopg2://flask_dev:letmein123@localhost/eli
 session = sessionmaker(bind=engine)()
 
 @app.route('/')
+def index():
+  return render_template("index.html")
+
 @app.route('/home/')
 def home():
     return "Hello, world!"
@@ -17,17 +20,19 @@ def home():
 @app.route('/person/')
 def showAllPersons():
     """ List all persons - Will return a table"""
-    all_people = session.query(Person).all()
-    # print("debug0")
-    # print(all_people[0].addresses[0].street)
-    return jsonify([p.serialize_summary for p in all_people])
+    people = session.query(Person).all()
+    return jsonify(people = [p.serialize_summary for p in people])
+
+@app.route('/list/')
+def list():
+    return json.dumps(["item1", "item2", "item3"])
 
 @app.route('/person/<int:person_id>/')
 def showPerson(person_id):
     """ Return a person profile """
     person = session.query(Person).filter_by(id = person_id).one()
     addresses = person.addresses
-    return jsonify(person.serialize_full)
+    return jsonify(person = person.serialize_full)
 
 @app.route('/person/<int:person_id>/edit', methods=['GET', 'POST'])
 def editPersonName(person_id):
