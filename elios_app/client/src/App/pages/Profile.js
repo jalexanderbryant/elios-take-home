@@ -89,9 +89,10 @@ const Person = ({ body }) => {
   // console.log(body)
   return (
     <div>
-      <h2>{body.full_name}</h2>
+      <h2>{body.full_name} <Link to={"/person/" + body.id +"/edit"} className="editName">Edit</Link></h2>
       <h4>D.O.B: {body.date_of_birth}</h4>
       <h4>Risk Score: {body.risk_score}</h4>
+      <h4>Criminal record: {body.has_criminal_record ? <strong>Yes</strong> : <strong>No</strong>}</h4>
       <hr />
       <br />
       <h3>Addresses</h3>

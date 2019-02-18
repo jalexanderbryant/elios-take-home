@@ -5,6 +5,7 @@ import Home from './pages/Home';
 import List from './pages/List';
 import PersonnelList from './pages/PersonnelList';
 import Profile from './pages/Profile';
+import EditProfile from './pages/EditProfile';
 
 class App extends Component {
   render() {
@@ -14,7 +15,9 @@ class App extends Component {
           <Route exact path='/' component={PersonnelList}/>
           <Route exact path='/home' component={Home}/>
           <Route path='/list' component={List}/>
+          <Route path='/person/:id/edit' component={EditProfile} />
           <Route path='/person/:id' component={Profile} />
+          
 
         </Switch>
       </div>
