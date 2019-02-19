@@ -6,7 +6,7 @@ from flask import request, redirect, jsonify, url_for, render_template
 import json
 
 ## Setup DB Session
-engine = create_engine('postgresql+psycopg2://flask_dev:letmein123@localhost/elios')
+engine = create_engine('postgresql+psycopg2://developer:letmein123@flask-test.cjqpvm7upos7.us-east-2.rds.amazonaws.com:5432/flask-test')
 session = sessionmaker(bind=engine)()
 
 @app.route('/')
