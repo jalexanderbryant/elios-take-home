@@ -13,6 +13,7 @@ class NavBar extends Component {
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="mr-auto">
               <Link to="/">Home</Link>
+              <Link to="/highest_risk">Highest Risk Personnel</Link>
             </Nav>
           </Navbar.Collapse>
         </Navbar>

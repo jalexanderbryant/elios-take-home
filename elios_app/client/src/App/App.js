@@ -4,6 +4,7 @@ import './App.css';
 import Home from './pages/Home';
 import List from './pages/List';
 import PersonnelList from './pages/PersonnelList';
+import RiskiestPersonnelList from './pages/RiskiestPersonnelList';
 import Profile from './pages/Profile';
 import EditProfile from './pages/EditProfile';
 
@@ -12,13 +13,11 @@ class App extends Component {
     const App = () => (
       <div>
         <Switch>
-          <Route exact path='/' component={PersonnelList}/>
-          <Route exact path='/home' component={Home}/>
-          <Route path='/list' component={List}/>
+          <Route exact path='/highest_risk' component={RiskiestPersonnelList}/>
           <Route path='/person/:id/edit' component={EditProfile} />
           <Route path='/person/:id' component={Profile} />
-          
-
+          <Route path='/person' component={PersonnelList}/>
+          <Route exact path='/' component={PersonnelList}/>
         </Switch>
       </div>
     )
