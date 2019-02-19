@@ -13,11 +13,12 @@ class App extends Component {
     const App = () => (
       <div>
         <Switch>
+          <Route exact path='/' component={PersonnelList}/>
           <Route exact path='/highest_risk' component={RiskiestPersonnelList}/>
           <Route path='/person/:id/edit' component={EditProfile} />
           <Route path='/person/:id' component={Profile} />
           <Route path='/person' component={PersonnelList}/>
-          <Route exact path='/' component={PersonnelList}/>
+          
         </Switch>
       </div>
     )
