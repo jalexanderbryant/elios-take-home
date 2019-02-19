@@ -11,17 +11,14 @@ session = sessionmaker(bind=engine)()
 
 @app.route('/')
 def index():
-  return render_template("index.html")
-
-@app.route('/home/')
-def home():
-    return "Hello, world!"
+  return "Hello, world!"
 
 @app.route('/person/')
 def showAllPersons():
     """ List all persons - Will return a table"""
     people = session.query(Person).all()
     return jsonify(people = [p.serialize_summary for p in people])
+
 
 @app.route('/list/')
 def list():
@@ -33,6 +30,12 @@ def showPerson(person_id):
     person = session.query(Person).filter_by(id = person_id).one()
     addresses = person.addresses
     return jsonify(person = person.serialize_full)
+
+@app.route('/person/highest_risk/')
+def showRiskiestPeople():
+  """ Return Riskiest employees - over 200"""
+  people = session.query(Person).filter(Person.risk_score >= 200)
+  return jsonify(people = [p.serialize_summary for p in people])
 
 @app.route('/person/<int:person_id>/edit', methods=['GET', 'POST'])
 def editPersonName(person_id):
